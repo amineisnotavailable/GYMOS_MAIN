@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ATHLETE)
+  firstName    String
+  lastName     String
+  phone        String?
+  photo        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  athleteProfile  AthleteProfile?
+  coachProfile    CoachProfile?
+  employee        Employee?
+  employerProfile EmployerProfile?
+  wallet          Wallet?
+
+  sentNotifications     Notification[] @relation("Sender")
+  receivedNotifications Notification[] @relation("Recipient")
+
+  sessionsAsCoach   Session[]           @relation("CoachSessions")
+  coachedAthletes   AthleteProfile[]    @relation("CoachAthletes")
+  WithdrawalRequest WithdrawalRequest[]
+}
+
+model AthleteProfile {
+  id                  Int       @id @default(autoincrement())
+  userId              Int       @unique
+  user                User      @relation(fields: [userId], references: [id])
+  maturity            Maturity  @default(ADULT)
+  parentContact       String?
+  level               Level     @default(AMATEUR)
+  competitionValidity Boolean   @default(false)
+  coachId             Int?
+  coach               User?     @relation("CoachAthletes", fields: [coachId], references: [id])
+  cardId              Int?
+  card                MockCard? @relation(fields: [cardId], references: [id])
+
+  sports   AthleteSport[]
+  sessions Session[]      @relation("AthleteSessions")
+}
+
+model CoachProfile {
+  id         Int     @id @default(autoincrement())
+  userId     Int     @unique
+  user       User    @relation(fields: [userId], references: [id])
+  specialty  String?
+  isApproved Boolean @default(false)
+}
+
+model EmployerProfile {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Sport {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  description String?
+  cost        Float
+  athletes    AthleteSport[]
+  Session     Session[]
+}
+
+model AthleteSport {
+  athleteId Int
+  sportId   Int
+  athlete   AthleteProfile @relation(fields: [athleteId], references: [id])
+  sport     Sport          @relation(fields: [sportId], references: [id])
+
+  @@id([athleteId, sportId])
+}
+
+model Session {
+  id         Int            @id @default(autoincrement())
+  coachId    Int
+  coach      User           @relation("CoachSessions", fields: [coachId], references: [id])
+  athleteId  Int
+  athlete    AthleteProfile @relation("AthleteSessions", fields: [athleteId], references: [id])
+  sportId    Int
+  sport      Sport          @relation(fields: [sportId], references: [id])
+  dateTime   DateTime
+  duration   Int
+  location   String?
+  notes      String?
+  createdAt  DateTime       @default(now())
+  Attendance Attendance[]
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  recipientId Int
+  recipient   User     @relation("Recipient", fields: [recipientId], references: [id])
+  senderId    Int?
+  sender      User?    @relation("Sender", fields: [senderId], references: [id])
+  message     String
+  type        String?
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Employee {
+  id       Int       @id @default(autoincrement())
+  userId   Int       @unique
+  user     User      @relation(fields: [userId], references: [id])
+  name     String
+  position String
+  salary   Float
+  schedule String?
+  hiredAt  DateTime  @default(now())
+  firedAt  DateTime?
+}
+
+model Attendance {
+  id        Int      @id @default(autoincrement())
+  sessionId Int?
+  session   Session? @relation(fields: [sessionId], references: [id])
+  athleteId Int
+  status    String
+  date      DateTime @default(now())
+}
+
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  balance   Float    @default(0.0)
+  createdAt DateTime @default(now())
+}
+
+model MockCard {
+  id             Int              @id @default(autoincrement())
+  cardNumber     String           @unique
+  holderName     String
+  expiry         String
+  cvv            String
+  balance        Float            @default(0.0)
+  AthleteProfile AthleteProfile[]
+}
+
+model Transaction {
+  id           Int      @id @default(autoincrement())
+  fromWalletId Int?
+  toWalletId   Int?
+  amount       Float
+  description  String?
+  createdAt    DateTime @default(now())
+}
+
+model GymRevenue {
+  id           Int      @id @default(autoincrement())
+  totalRevenue Float    @default(0.0)
+  updatedAt    DateTime @default(now())
+}
+
+model WithdrawalRequest {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Float
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  COACH
+  ATHLETE
+  EMPLOYEE
+  EMPLOYER
+  OWNER
+}
+
+enum Maturity {
+  MINOR
+  ADULT
+}
+
+enum Level {
+  AMATEUR
+  INTERMEDIATE
+  PROFESSIONAL
+}
