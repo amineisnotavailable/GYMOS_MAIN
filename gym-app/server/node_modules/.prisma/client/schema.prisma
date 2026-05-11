@@ -31,6 +31,7 @@ model User {
   sessionsAsCoach   Session[]           @relation("CoachSessions")
   coachedAthletes   AthleteProfile[]    @relation("CoachAthletes")
   WithdrawalRequest WithdrawalRequest[]
+  Order             Order[]
 }
 
 model AthleteProfile {
@@ -46,8 +47,9 @@ model AthleteProfile {
   cardId              Int?
   card                MockCard? @relation(fields: [cardId], references: [id])
 
-  sports   AthleteSport[]
-  sessions Session[]      @relation("AthleteSessions")
+  sports              AthleteSport[]
+  sessions            Session[]             @relation("AthleteSessions")
+  AthleteSubscription AthleteSubscription[]
 }
 
 model CoachProfile {
@@ -171,6 +173,60 @@ model WithdrawalRequest {
   amount    Float
   status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
   createdAt DateTime @default(now())
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  category    String // FOOD, SUPPLEMENT, ACCESSORY
+  stock       Int         @default(100)
+  createdAt   DateTime    @default(now())
+  OrderItem   OrderItem[]
+}
+
+model SubscriptionPlan {
+  id                  Int                   @id @default(autoincrement())
+  name                String // Basic, Standard, Premium
+  price               Float
+  sessionCount        Int
+  description         String?
+  AthleteSubscription AthleteSubscription[]
+  OrderItem           OrderItem[]
+}
+
+model AthleteSubscription {
+  id                Int              @id @default(autoincrement())
+  athleteId         Int
+  athlete           AthleteProfile   @relation(fields: [athleteId], references: [id])
+  planId            Int
+  plan              SubscriptionPlan @relation(fields: [planId], references: [id])
+  remainingSessions Int
+  startDate         DateTime         @default(now())
+  endDate           DateTime?
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  totalAmount Float
+  createdAt   DateTime    @default(now())
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        Int               @id @default(autoincrement())
+  orderId   Int
+  order     Order             @relation(fields: [orderId], references: [id])
+  productId Int?
+  product   Product?          @relation(fields: [productId], references: [id])
+  planId    Int?
+  plan      SubscriptionPlan? @relation(fields: [planId], references: [id])
+  quantity  Int               @default(1)
+  price     Float
 }
 
 enum Role {

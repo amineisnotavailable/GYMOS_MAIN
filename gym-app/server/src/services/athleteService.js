@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 exports.createProfile = async (userId, data) => {
   return prisma.athleteProfile.create({
@@ -10,21 +10,21 @@ exports.createProfile = async (userId, data) => {
       level: data.level || 'AMATEUR',
       competitionValidity: data.competitionValidity || false,
     }
-  })
-}
+  });
+};
 
 exports.assignCoach = async (athleteId, coachId) => {
   return prisma.athleteProfile.update({
     where: { id: athleteId },
     data: { coachId }
-  })
-}
+  });
+};
 
 exports.addSport = async (athleteId, sportId) => {
   return prisma.athleteSport.create({
     data: { athleteId, sportId }
-  })
-}
+  });
+};
 
 // Returns the athlete's profile (auto-creates if missing)
 exports.getProfile = async (userId) => {
@@ -34,11 +34,15 @@ exports.getProfile = async (userId) => {
       sports: { include: { sport: true } },
       coach: true,
       sessions: { include: { sport: true, coach: true } },
-      user: { select: { id: true, email: true, firstName: true, lastName: true, phone: true } }
+      user: { select: { id: true, email: true, firstName: true, lastName: true, phone: true } },
+      subscriptions: {                       // <-- NEW: include subscriptions
+        include: { plan: true },
+        orderBy: { startDate: 'desc' },
+      },
     }
-  })
+  });
 
-  if (profile) return profile
+  if (profile) return profile;
 
   // Auto-create a default profile
   return prisma.athleteProfile.create({
@@ -52,10 +56,14 @@ exports.getProfile = async (userId) => {
       sports: { include: { sport: true } },
       coach: true,
       sessions: { include: { sport: true, coach: true } },
-      user: { select: { id: true, email: true, firstName: true, lastName: true, phone: true } }
+      user: { select: { id: true, email: true, firstName: true, lastName: true, phone: true } },
+      subscriptions: {
+        include: { plan: true },
+        orderBy: { startDate: 'desc' },
+      },
     }
-  })
-}
+  });
+};
 
 // Get all athlete profiles (for coach dropdowns)
 exports.getAllAthletes = async () => {
@@ -64,8 +72,8 @@ exports.getAllAthletes = async () => {
       user: { select: { id: true, email: true, firstName: true, lastName: true } },
       coach: { select: { id: true, firstName: true, lastName: true } }
     }
-  })
-}
+  });
+};
 
 // Get sessions for a specific athlete (by athlete profile id)
 exports.getMySessions = async (athleteId) => {
@@ -76,5 +84,5 @@ exports.getMySessions = async (athleteId) => {
       coach: { select: { firstName: true, lastName: true } }
     },
     orderBy: { dateTime: 'asc' }
-  })
-}
+  });
+};

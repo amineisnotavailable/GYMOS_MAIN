@@ -31,6 +31,10 @@ import EmployerPayUser from './pages/employer/PayUser';
 import AdminWallet from './pages/admin/Wallet';
 import EmployeeWallet from './pages/employee/Wallet';
 
+import Shop from './pages/athlete/Shop'
+import EmployeeSales from './pages/employee/Sales'
+import OwnerSales from './pages/owner/Sales'
+
 import CoachDashboard from './pages/coach/Dashboard'
 import MyAthletes from './pages/coach/MyAthletes'
 import CoachSchedule from './pages/coach/Schedule'
@@ -73,6 +77,7 @@ const AppRoutes = () => {
          <Route path="employees" element={<OwnerEmployees />} />
          <Route path="employers" element={<OwnerEmployers />} />
          <Route path="pay-user" element={<OwnerPayUser />} />
+         <Route path="sales" element={<OwnerSales />} />
          <Route path="notifications" element={<OwnerNotifications />} />
          <Route path="reports" element={<OwnerReports />} />
          <Route path="wallet" element={<OwnerWallet />} />
@@ -90,6 +95,7 @@ const AppRoutes = () => {
       <Route path="/athlete" element={<ProtectedRoute roles={['ATHLETE']}><Layout role="ATHLETE" /></ProtectedRoute>}>
         <Route index element={<AthleteDashboard />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="shop" element={<Shop />} />
         <Route path="sports" element={<Sports />} />
         <Route path="schedule" element={<AthleteSchedule />} />
         <Route path="notifications" element={<AthleteNotifications />} />
@@ -98,6 +104,7 @@ const AppRoutes = () => {
       <Route path="/employee" element={<ProtectedRoute roles={['EMPLOYEE']}><Layout role="EMPLOYEE" /></ProtectedRoute>}>
         <Route index element={<EmployeeDashboard />} />
         <Route path="wallet" element={<EmployeeWallet />} />
+        <Route path="sales" element={<EmployeeSales />} />
         <Route path="athletes" element={<EmployeeAthletes />} />
         <Route path="notifications" element={<EmployeeNotifications />} />
       </Route>

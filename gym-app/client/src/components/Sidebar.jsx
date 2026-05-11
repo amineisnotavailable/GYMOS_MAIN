@@ -2,7 +2,8 @@ import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthProvider'
 import {
   DashboardIcon, UsersIcon, BriefcaseIcon, BellIcon, ChartIcon,
-  ClipboardIcon, UserIcon, CalendarIcon, SportsIcon, UserPlusIcon, ClipboardCheckIcon
+  ClipboardIcon, UserIcon, CalendarIcon, SportsIcon, UserPlusIcon, ClipboardCheckIcon,
+  ShopIcon
 } from './Icons'
 
 const adminTabs = [
@@ -26,6 +27,7 @@ const coachTabs = [
 
 const athleteTabs = [
   { to: '/athlete', label: 'Dashboard', Icon: DashboardIcon, end: true },
+  { to: '/athlete/shop', label: 'Shop', Icon: ShopIcon },  // you can use a different icon
   { to: '/athlete/profile', label: 'Profile', Icon: UserIcon },
   { to: '/athlete/sports', label: 'Sports', Icon: SportsIcon },
   { to: '/athlete/schedule', label: 'Schedule', Icon: CalendarIcon },
@@ -35,6 +37,7 @@ const athleteTabs = [
 const employeeTabs = [
   { to: '/employee', label: 'Dashboard', Icon: DashboardIcon, end: true },
   { to: '/employee/athletes', label: 'Athletes', Icon: UsersIcon },
+  { to: '/employee/sales', label: 'Sales', Icon: ChartIcon },
   { to: '/employee/notifications', label: 'Notifications', Icon: BellIcon },
   { to: '/employee/wallet', label: 'Wallet', Icon: UserIcon },
 ]
@@ -54,6 +57,7 @@ const ownerTabs = [
   { to: '/owner/employees', label: 'Employees', Icon: BriefcaseIcon },
   { to: '/owner/employers', label: 'Employers', Icon: UserPlusIcon },
   { to: '/owner/pay-user', label: 'Pay User', Icon: UserPlusIcon },
+  { to: '/owner/sales', label: 'Sales', Icon: ChartIcon },
   { to: '/owner/notifications', label: 'Notifications', Icon: BellIcon },
   { to: '/owner/reports', label: 'Reports', Icon: ChartIcon },
   { to: '/owner/wallet', label: 'Wallet', Icon: UserIcon },
