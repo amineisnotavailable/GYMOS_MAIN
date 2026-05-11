@@ -22,6 +22,7 @@ app.use('/api/public', require('./routes/public'));
 app.use('/api/employee', require('./routes/employee'));
 app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/employer', require('./routes/employer'));
+app.use('/api/owner', require('./routes/owner'));
 
 // Serve React build in production
 if (process.env.NODE_ENV === 'production') {

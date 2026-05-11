@@ -50,6 +50,15 @@ router.put('/notifications/:id/read', async (req, res) => {
   res.json({ success: true });
 });
 
+router.get('/users', async (req, res) => {
+  // returns users except ATHLETE
+  const users = await prisma.user.findMany({
+    where: { role: { not: 'ATHLETE' } },
+    select: { id: true, email: true, role: true, firstName: true, lastName: true }
+  });
+  res.json(users);
+});
+
 // Gym revenue
 router.get('/revenue', ctrl.getGymRevenue);
 
