@@ -3,7 +3,7 @@ const auth = require('../middleware/auth');
 const role = require('../middleware/roleCheck');
 const ctrl = require('../controllers/adminController');
 
-router.use(auth, role('ADMIN', 'OWNER'));
+router.use(auth, role('ADMIN', 'OWNER'));   // <-- must include OWNER
 
 router.get('/users', ctrl.getUsers);
 router.post('/employees', ctrl.createEmployee);
@@ -15,6 +15,7 @@ router.delete('/reject-coach/:id', ctrl.rejectCoach);
 router.get('/notifications', ctrl.getNotifications);
 router.get('/revenue', ctrl.getGymRevenue);
 router.post('/employers', ctrl.createEmployer);
+router.get('/employees', ctrl.getEmployees);
 
 router.put('/notifications/:id/read', async (req, res) => {
   const { PrismaClient } = require('@prisma/client');

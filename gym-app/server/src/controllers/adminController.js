@@ -184,3 +184,15 @@ exports.createEmployer = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Get all employees (for admin / owner)
+exports.getEmployees = async (req, res) => {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    const employees = await prisma.employee.findMany();
+    res.json(employees);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

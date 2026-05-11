@@ -15,6 +15,7 @@ router.post('/sessions', coachCtrl.createSession)
 router.post('/remind', coachCtrl.sendReminder)
 router.post('/notifications', coachCtrl.sendNotification);
 router.get('/users', coachCtrl.getUsers);
+router.put('/athletes/:id/level', coachCtrl.updateAthleteLevel);
 
 
 // Notifications (shared controller)

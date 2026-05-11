@@ -134,3 +134,24 @@ exports.getUsers = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.updateAthleteLevel = async (req, res) => {
+  try {
+    const athleteId = parseInt(req.params.id);
+    const { level } = req.body;
+    if (!['AMATEUR', 'INTERMEDIATE', 'PROFESSIONAL'].includes(level)) {
+      return res.status(400).json({ error: 'Invalid level' });
+    }
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    const athlete = await prisma.athleteProfile.findUnique({ where: { id: athleteId } });
+    if (!athlete || athlete.coachId !== req.user.id) {
+      return res.status(403).json({ error: 'Not allowed' });
+    }
+    const updated = await prisma.athleteProfile.update({
+      where: { id: athleteId },
+      data: { level },
+    });
+    res.json(updated);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+};

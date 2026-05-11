@@ -34,6 +34,8 @@ import EmployeeWallet from './pages/employee/Wallet';
 import Shop from './pages/athlete/Shop'
 import EmployeeSales from './pages/employee/Sales'
 import OwnerSales from './pages/owner/Sales'
+import AthleteWallet from './pages/athlete/Wallet'
+import EmployerWallet from './pages/employer/Wallet';
 
 import CoachDashboard from './pages/coach/Dashboard'
 import MyAthletes from './pages/coach/MyAthletes'
@@ -96,6 +98,7 @@ const AppRoutes = () => {
         <Route index element={<AthleteDashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="shop" element={<Shop />} />
+        <Route path="wallet" element={<AthleteWallet />} />
         <Route path="sports" element={<Sports />} />
         <Route path="schedule" element={<AthleteSchedule />} />
         <Route path="notifications" element={<AthleteNotifications />} />
@@ -117,6 +120,7 @@ const AppRoutes = () => {
       <Route index element={<EmployerDashboard />} />
       <Route path="employees" element={<EmployerEmployees />} />
       <Route path="pay-user" element={<EmployerPayUser />} />
+      <Route path="wallet" element={<EmployerWallet />} />
       <Route path="withdrawals" element={<EmployerWithdrawalRequests />} />
       <Route path="notifications" element={<EmployerNotifications />} />
     </Route>

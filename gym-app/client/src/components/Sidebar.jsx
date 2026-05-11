@@ -29,6 +29,7 @@ const athleteTabs = [
   { to: '/athlete', label: 'Dashboard', Icon: DashboardIcon, end: true },
   { to: '/athlete/shop', label: 'Shop', Icon: ShopIcon },  // you can use a different icon
   { to: '/athlete/profile', label: 'Profile', Icon: UserIcon },
+  { to: '/athlete/wallet', label: 'Wallet', Icon: UserIcon },   // use any suitable icon
   { to: '/athlete/sports', label: 'Sports', Icon: SportsIcon },
   { to: '/athlete/schedule', label: 'Schedule', Icon: CalendarIcon },
   { to: '/athlete/notifications', label: 'Notifications', Icon: BellIcon },
@@ -47,6 +48,7 @@ const employerTabs = [
   { to: '/employer/employees', label: 'Employees', Icon: BriefcaseIcon },
   { to: '/employer/pay-user', label: 'Pay User', Icon: UserPlusIcon },
   { to: '/employer/withdrawals', label: 'Withdrawals', Icon: BellIcon },
+  { to: '/employer/wallet', label: 'Wallet', Icon: UserIcon },
   { to: '/employer/notifications', label: 'Notifications', Icon: BellIcon },
 ]
 
